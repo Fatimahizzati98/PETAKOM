@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
-use App\Models\Role;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
 class ProfileController extends Controller
@@ -20,7 +17,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request)
     {
-        return view('profile.editProfile', [
+        return view('profile.edit', [
             'user' => $request->user(),
         ]);
     }
@@ -41,7 +38,7 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('profile.myprofile')->with('status', 'profile-updated');
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
     /**
@@ -66,21 +63,5 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
-    }
-
-    public function allUser(){
-
-        $committee_users = User::whereRoleIs('committee')->get();
-        $student_users = User::whereRoleIs('student')->get();
-        $lecturer_users = User::whereRoleIs('lecturer')->get();
-        $coordinator_users = User::whereRoleIs('coordinator')->get();
-        $dean_users = User::whereRoleIs('dean')->get();
-        $hosd_users = User::whereRoleIs('hosd')->get();
-
-        return view('Profile.allUser',compact('committee_users', 'student_users', 'lecturer_users', 'coordinator_users', 'dean_users', 'hosd_users'));
-    }
-
-    public function myprofile(){
-        return view('Profile.myprofile');
     }
 }
